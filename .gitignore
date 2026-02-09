@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+.env
+
+# Debug files
+tiktok_debug.json
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

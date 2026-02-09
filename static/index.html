@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Premium Downloader</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TikTok <span class="gradient-text">Downloader</span></h1>
+            <p class="subtitle">Tải video và ảnh TikTok không logo, chất lượng cao nhất.</p>
+        </header>
+
+        <main>
+            <!-- Mode Toggle Buttons -->
+            <div class="mode-toggle">
+                <button id="modeImage" class="mode-btn active" data-mode="image">
+                    <i data-feather="image"></i>
+                    <span>Ảnh</span>
+                </button>
+                <button id="modeAudio" class="mode-btn" data-mode="audio">
+                    <i data-feather="music"></i>
+                    <span>Audio</span>
+                </button>
+            </div>
+
+            <div class="input-section">
+                <div class="input-wrapper">
+                    <i data-feather="link" class="input-icon"></i>
+                    <input type="text" id="urlInput" placeholder="Dán link TikTok vào đây..." autocomplete="off">
+                    <button id="pasteBtn" class="icon-btn" title="Dán"><i data-feather="clipboard"></i></button>
+                </div>
+                <button id="downloadBtn" class="primary-btn">
+                    <span class="btn-text">Tải Ngay</span>
+                    <div class="loader hidden"></div>
+                </button>
+            </div>
+
+            <div id="errorMsg" class="error-msg hidden"></div>
+
+            <div id="resultSection" class="result-section hidden">
+                <div class="meta-info">
+                    <img id="avatar" src="" alt="Avatar" class="avatar">
+                    <div class="text-info">
+                        <h3 id="authorName">Create Name</h3>
+                        <p id="videoTitle">Video caption here...</p>
+                    </div>
+                </div>
+
+                <!-- Gallery cho Slideshow -->
+                <div id="gallery" class="gallery hidden">
+                    <!-- Images will be injected here -->
+                </div>
+
+                <!-- Video Player cho Video -->
+                <div id="videoContainer" class="video-container hidden">
+                    <video id="videoPlayer" controls></video>
+                </div>
+
+                <!-- Audio Mode Results -->
+                <div id="audioResults" class="audio-results hidden">
+                    <div class="audio-item" id="musicDownloadItem">
+                        <div class="audio-item-info">
+                            <i data-feather="music"></i>
+                            <span>Tải Video/Audio</span>
+                        </div>
+                        <button id="convertMp3Btn" class="download-btn">
+                            <i data-feather="download"></i> Tải xuống
+                        </button>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="downloadAllBtn" class="secondary-btn hidden">
+                        <i data-feather="download-cloud"></i> Tải Tất Cả (ZIP)
+                    </button>
+                    <button id="downloadAudioBtn" class="secondary-btn hidden">
+                        <i data-feather="music"></i> Tải Nhạc
+                    </button>
+                    <button id="newDownloadBtn" class="ghost-btn">Tải Liên Kết Khác</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 TikTok Premium Downloader.</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
