@@ -206,8 +206,9 @@ async def convert_to_mp3(request: URLRequest):
                 title = "tiktok_audio"
             
             # Use urllib to encode filename for Content-Disposition
+            # Add .mp3 before the actual extension (e.g., .mp3.m4a)
             from urllib.parse import quote
-            safe_filename = quote(f"{title}{ext}")
+            safe_filename = quote(f"{title}.mp3{ext}")
             
             return StreamingResponse(
                 io.BytesIO(file_data),

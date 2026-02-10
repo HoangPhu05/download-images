@@ -182,12 +182,28 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Get filename from Content-Disposition header if available
             const contentDisposition = response.headers.get('Content-Disposition');
-            let filename = 'tiktok_audio.mp3';
+            let filename = '';
             if (contentDisposition) {
-                const match = contentDisposition.match(/filename=(.+)/);
+                // Try filename*=UTF-8'' format first (URL encoded)
+                let match = contentDisposition.match(/filename\*=UTF-8''(.+)/i);
                 if (match) {
-                    filename = match[1].replace(/"/g, '');
+                    try {
+                        filename = decodeURIComponent(match[1]);
+                    } catch (e) {
+                        filename = match[1];
+                    }
+                } else {
+                    // Fallback to filename= format
+                    match = contentDisposition.match(/filename=["']?([^"';\n]+)["']?/);
+                    if (match) {
+                        filename = match[1];
+                    }
                 }
+            }
+            
+            // If no filename from server, generate one with caption
+            if (!filename) {
+                filename = sanitizeFilename(currentData?.title || 'tiktok_audio') + '.mp3';
             }
             
             a.download = filename;
