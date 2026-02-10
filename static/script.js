@@ -33,6 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUrl = ''; // Store current URL for conversion
     let currentMode = 'image'; // 'image' or 'audio'
 
+    // Helper function to sanitize filename
+    function sanitizeFilename(name, maxLength = 100) {
+        if (!name) return 'tiktok';
+        // Remove special characters that are not allowed in filenames
+        let clean = name.replace(/[<>:"/\\|?*\x00-\x1f]/g, '')
+                       .replace(/[\s]+/g, '_')
+                       .trim();
+        // Truncate if too long
+        if (clean.length > maxLength) {
+            clean = clean.substring(0, maxLength);
+        }
+        return clean || 'tiktok';
+    }
+
     // Mode Toggle Logic
     modeImageBtn.addEventListener('click', () => {
         currentMode = 'image';
@@ -113,10 +127,11 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadAllBtn.innerHTML = '<div class="loader" style="width:15px;height:15px;border-width:2px"></div> Đang nén...';
         
         try {
+            const zipFilename = sanitizeFilename(currentData.title) + '.zip';
             const response = await fetch('/api/download-zip', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ urls: currentData.images })
+                body: JSON.stringify({ urls: currentData.images, filename: zipFilename })
             });
 
             if (!response.ok) throw new Error("Lỗi khi tải zip");
@@ -125,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const downloadUrl = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = downloadUrl;
-            a.download = "tiktok_images.zip";
+            a.download = zipFilename;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -223,8 +238,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     actions.className = 'image-actions';
 
                     const downloadLink = document.createElement('a');
-                    // Use proxy endpoint for download
-                    const proxyUrl = `/api/download-image?url=${encodeURIComponent(imgUrl)}&filename=tiktok_image_${index + 1}.jpg`;
+                    // Use proxy endpoint for download with caption as filename
+                    const baseFilename = sanitizeFilename(data.title);
+                    const proxyUrl = `/api/download-image?url=${encodeURIComponent(imgUrl)}&filename=${encodeURIComponent(baseFilename + '_' + (index + 1) + '.jpg')}`;
                     downloadLink.href = proxyUrl;
                     downloadLink.className = 'download-btn';
                     downloadLink.textContent = 'Tải xuống';

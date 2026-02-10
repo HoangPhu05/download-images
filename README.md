@@ -29,18 +29,20 @@ uvicorn main:app --reload
 
 ```
 download-images/
+├── .gitignore             # Git ignore rules
 ├── core/
 │   └── downloader.py      # Logic tải TikTok
 ├── scripts/
-│   ├── update_ytdlp.py    # Script update yt-dlp
-│   └── update-yt-dlp.ps1
+│   ├── update_ytdlp.py    # Script update yt-dlp (Python)
+│   └── update-yt-dlp.ps1  # Script update yt-dlp (PowerShell)
 ├── static/
 │   ├── index.html         # Giao diện web
 │   ├── script.js          # Logic frontend
 │   └── style.css          # Styles
 ├── main.py                # FastAPI server
-├── README.md
-└── requirements.txt
+├── README.md              # Tài liệu hướng dẫn
+├── requirements.txt       # Python dependencies
+└── tiktok_debug.json      # Debug output (khi DEBUG_TIKTOK=1)
 ```
 
 ## Cấu hình (tuỳ chọn)

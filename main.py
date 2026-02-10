@@ -24,6 +24,7 @@ class URLRequest(BaseModel):
 
 class DownloadRequest(BaseModel):
     urls: list[str]
+    filename: str = "tiktok_images.zip"
 
 @app.get("/")
 async def read_root():
@@ -39,6 +40,7 @@ async def extract_info(request: URLRequest):
 @app.get("/api/download-image")
 async def download_image(url: str, filename: str = "image.jpg"):
     """Proxy download for TikTok images"""
+    from urllib.parse import quote
     try:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
@@ -51,10 +53,13 @@ async def download_image(url: str, filename: str = "image.jpg"):
         # Determine content type
         content_type = response.headers.get("Content-Type", "image/jpeg")
         
+        # Encode filename for UTF-8 support
+        safe_filename = quote(filename)
+        
         return StreamingResponse(
             io.BytesIO(response.content),
             media_type=content_type,
-            headers={"Content-Disposition": f"attachment; filename={filename}"}
+            headers={"Content-Disposition": f"attachment; filename*=UTF-8''{safe_filename}"}
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Lỗi: {str(e)}")
@@ -87,11 +92,15 @@ async def download_zip(request: DownloadRequest):
     
     zip_buffer.seek(0)
     
+    # Use custom filename from request
+    from urllib.parse import quote
+    safe_filename = quote(request.filename)
+    
     # Trả về file zip
     return StreamingResponse(
         zip_buffer, 
         media_type="application/zip", 
-        headers={"Content-Disposition": "attachment; filename=tiktok_images.zip"}
+        headers={"Content-Disposition": f"attachment; filename*=UTF-8''{safe_filename}"}
     )
 
 @app.post("/api/convert-mp3")
